@@ -1,0 +1,1 @@
+Once this project is live, and if the volume of uploaded media is high, it might be a good idea to untrack this folder.
