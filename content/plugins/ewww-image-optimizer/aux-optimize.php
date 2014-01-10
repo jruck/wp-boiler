@@ -141,7 +141,7 @@ function ewww_image_optimizer_aux_images_import() {
 		die;
 	}
 	// we need to strip the excess data from attachments, since we only want the attachment IDs
-	$attachments = ewww_image_optimizer_clean_attachments($attachments);
+//	$attachments = ewww_image_optimizer_clean_attachments($attachments);
 	$ewww_debug .= "importing " . count($attachments) . " attachments<br>";
 	foreach ($attachments as $id) {
 		// allow 50 seconds for each import
@@ -159,7 +159,7 @@ function ewww_image_optimizer_aux_images_import() {
 		} else {
 			$results = '';
 		}
-		$query = "SELECT id,image_size FROM " . $wpdb->prefix . "ewwwio_images WHERE path = '$attachment'";
+		$query = "SELECT id,image_size FROM " . $wpdb->prefix . "ewwwio_images WHERE BINARY path = '$attachment'";
 		$already_optimized = $wpdb->get_row($query, ARRAY_A);
 		$image_size = filesize($attachment);
 		$ewww_debug .= "current attachment: $attachment<br>";
@@ -204,7 +204,7 @@ function ewww_image_optimizer_aux_images_import() {
 				} else {
 					$results = '';
 				}
-				$query = "SELECT id,image_size FROM " . $wpdb->prefix . "ewwwio_images WHERE path = '$resize_path'";
+				$query = "SELECT id,image_size FROM " . $wpdb->prefix . "ewwwio_images WHERE BINARY path = '$resize_path'";
 				$already_optimized = $wpdb->get_row($query, ARRAY_A);
 				$image_size = filesize($resize_path);
 				$ewww_debug .= "current size: $image_size<br>";
@@ -239,13 +239,13 @@ function ewww_image_optimizer_aux_images_import() {
 }
 
 function ewww_image_optimizer_aux_images_table() {
-	// verify that an authorized user has started the optimizer
+	// verify that an authorized user has called function
 	if (!wp_verify_nonce($_REQUEST['_wpnonce'], 'ewww-image-optimizer-aux-images')) {
 		wp_die(__('Cheatin&#8217; eh?', EWWW_IMAGE_OPTIMIZER_DOMAIN));
 	} 
 	global $wpdb;
 	$offset = 50 * $_POST['offset'];
-	$query = "SELECT path,results,gallery FROM " . $wpdb->prefix . "ewwwio_images ORDER BY id DESC LIMIT $offset,50";
+	$query = "SELECT path,results,gallery,id FROM " . $wpdb->prefix . "ewwwio_images ORDER BY id DESC LIMIT $offset,50";
 	$already_optimized = $wpdb->get_results($query, ARRAY_N);
         $upload_info = wp_upload_dir();
 	$upload_path = $upload_info['basedir'];
@@ -262,16 +262,28 @@ function ewww_image_optimizer_aux_images_table() {
 			// get a human readable filesize
 			$file_size = size_format(filesize($optimized_image[0]), 2);
 			$file_size = str_replace('B ', 'B', $file_size);
-?>			<tr<?php if($alternate) echo " class='alternate'"; ?>>
+?>			<tr<?php if($alternate) echo " class='alternate'"; ?> id="image-<?php echo $optimized_image[3]; ?>">
 				<td style='width:80px' class='column-icon'><img width='50' height='50' src='<?php echo $image_url; ?>' /></td>
 				<td class='title'>...<?php echo $image_name; ?></td>
 				<td><?php echo $type; ?></td>
-				<td><?php echo "$savings <br>" . sprintf(__('Image Size: %s', EWWW_IMAGE_OPTIMIZER_DOMAIN), $file_size); ?></td>
+				<td><?php echo "$savings <br>" . sprintf(__('Image Size: %s', EWWW_IMAGE_OPTIMIZER_DOMAIN), $file_size); ?><br><a class="removeimage" onclick="ewwwRemoveImage(<?php echo $optimized_image[3]; ?>)"><?php _e('Remove from table', EWWW_IMAGE_OPTIMIZER_DOMAIN); ?></a></td>
 			</tr>
 <?php			$alternate = !$alternate;
 		}
 	}
 	echo '</table>';
+	die();
+}
+
+function ewww_image_optimizer_aux_images_remove() {
+	// verify that an authorized user has called function
+	if (!wp_verify_nonce($_REQUEST['_wpnonce'], 'ewww-image-optimizer-aux-images')) {
+		wp_die(__('Cheatin&#8217; eh?', EWWW_IMAGE_OPTIMIZER_DOMAIN));
+	} 
+	global $wpdb;
+	if ($wpdb->query($wpdb->prepare("DELETE FROM " . $wpdb->prefix . "ewwwio_images WHERE id = " . $_POST['image_id']))) {
+		echo "1";
+	}
 	die();
 }
 
@@ -309,6 +321,8 @@ function ewww_image_optimizer_image_scan($dir) {
 						$ewww_debug .= "match found for $path<br>";
 						$skip_optimized = true;
 						break;
+					} else {
+						$ewww_debug .= "mismatch found for $path, db says " . $optimized['image_size'] . " vs. current $image_size<br>";
 					}
 				}
 			}
@@ -429,7 +443,7 @@ function ewww_image_optimizer_aux_images_script($hook) {
 				'fields' => 'ids'
 	                ));
 			// we need to strip the excess data from attachments, since we only want the attachment IDs
-			$sliders = ewww_image_optimizer_clean_attachments($sliders);
+//			$sliders = ewww_image_optimizer_clean_attachments($sliders);
 			foreach ($sliders as $slider) {
 				$slides = get_posts(array(
 	                        	'numberposts' => -1,
@@ -448,7 +462,7 @@ function ewww_image_optimizer_aux_images_script($hook) {
 					)
 				);
 				// we need to strip the excess data from attachments, since we only want the attachment IDs
-				$slides = ewww_image_optimizer_clean_attachments($slides);
+//				$slides = ewww_image_optimizer_clean_attachments($slides);
 				foreach ($slides as $slide) {
 					$backup_sizes = get_post_meta($slide, '_wp_attachment_backup_sizes', true);
 					$type = get_post_meta($slide, 'ml-slider_type', true);
@@ -458,7 +472,7 @@ function ewww_image_optimizer_aux_images_script($hook) {
 							if (preg_match('/resized-/', $backup_size)) {
 								$path = $meta['path'];
 								$image_size = filesize($path);
-								$query = "SELECT id FROM " . $wpdb->prefix . 'ewwwio_images' . " WHERE path LIKE '$path' AND image_size LIKE '$image_size'";
+								$query = "SELECT id FROM " . $wpdb->prefix . 'ewwwio_images' . " WHERE BINARY path LIKE '$path' AND image_size LIKE '$image_size'";
 								$already_optimized = $wpdb->get_results($query);
 								$mimetype = ewww_image_optimizer_mimetype($path, 'i');
 								if (preg_match('/^image\/(jpeg|png|gif)/', $mimetype) && empty($already_optimized)) {
@@ -544,9 +558,10 @@ function ewww_image_optimizer_aux_images_loop($attachment = null, $auto = false)
 	$attachments = get_option('ewww_image_optimizer_aux_attachments');
 	// do the optimization for the current image
 	$results = ewww_image_optimizer($attachment, 4, false, false);
-	$query = "SELECT id FROM " . $wpdb->prefix . "ewwwio_images WHERE path = '$attachment'";
+	$query = "SELECT id FROM " . $wpdb->prefix . "ewwwio_images WHERE BINARY path = '$attachment'";
 	$already_optimized = $wpdb->get_row($query);
 	if (empty($already_optimized)) {
+		$ewww_debug .= "creating new record, path: $attachment, size: " . filesize($attachment) . "<br>";
 		// store info on the current image for future reference
 		$wpdb->insert( $wpdb->prefix . "ewwwio_images", array(
 				'path' => $attachment,
@@ -554,6 +569,7 @@ function ewww_image_optimizer_aux_images_loop($attachment = null, $auto = false)
 				'results' => $results[1],
 			));
 	} else {
+		$ewww_debug .= "updating existing record, path: $attachment, size: " . filesize($attachment) . "<br>";
 		// store info on the current image for future reference
 		$wpdb->update( $wpdb->prefix . "ewwwio_images",
 			array(
@@ -602,6 +618,7 @@ function ewww_image_optimizer_aux_images_cleanup($auto = false) {
 }
 add_action('admin_enqueue_scripts', 'ewww_image_optimizer_aux_images_script');
 add_action('wp_ajax_bulk_aux_images_table', 'ewww_image_optimizer_aux_images_table');
+add_action('wp_ajax_bulk_aux_images_remove', 'ewww_image_optimizer_aux_images_remove');
 add_action('wp_ajax_bulk_aux_images_import', 'ewww_image_optimizer_aux_images_import');
 add_action('wp_ajax_bulk_aux_images_loading', 'ewww_image_optimizer_aux_images_loading');
 add_action('wp_ajax_bulk_aux_images_init', 'ewww_image_optimizer_aux_images_initialize');
