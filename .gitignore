@@ -4,3 +4,5 @@
 /db-sync
 /content/upgrade/
 .DS_Store
+
+#/content/uploads
