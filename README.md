@@ -17,6 +17,7 @@ It includes a copy of the Twenty Twelve theme for use as a control variable and 
 * **Hide Update Reminder Message** - for disabling the constant update reminders, useful when handing sites over to clients so they aren't bothered by upgrade alerts, or tempted to upgrade without consulting with you first
 * **W3 Total Cache** - for, like, caching
 * **WP Typography** - for automatically applying proper em dashes, smart quotes, elipses, etc.
+* **Mobble** - for easy device, browser, and individual page detection for use in CSS
 
 A default database is available upon request with a number of baseline configurations.
 
