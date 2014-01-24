@@ -1,3 +1,4 @@
+#Basic
 /shared
 /local-config.php
 /sql-dump-*.sql
@@ -5,4 +6,10 @@
 /content/upgrade/
 .DS_Store
 
+#WP Uploads (off by default)
 #/content/uploads
+
+#Project Files
+*.esproj
+*.sublime-project
+*.sublime-workspace
