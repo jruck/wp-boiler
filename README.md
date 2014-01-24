@@ -8,7 +8,7 @@
 
 This is a Git-friendly foundation and workflow for quickly creating and managing new WordPress sites, assembled by [Justin Ruckman](http://jruck.us) of [Priceless Misc](http://pricelessmisc.com), and heavily derivative of Mark Jarquith's [WordPress Skeleton](https://github.com/markjaquith/WordPress-Skeleton).
 
-It includes a copy of the Twenty Twelve theme for use as a control variable and emergency fallback during development and testing, plus a handful of commonly-installed plugins:
+It includes a copy of the latest default theme for use as a control variable and emergency fallback during development and testing, plus a handful of commonly-installed plugins:
 
 *  **Akismet** - for spam
 * **All-In-One SEO Pack** - for tweaking page titles/descriptions as displayed on search engines, regardless of theme used
