@@ -37,9 +37,9 @@ I'll update the WordPress version when I feel it's ready for production. Include
 
 2.	On your local machine, in the directory where you keep your code, execute the following, replacing `NEW_PROJECT_NAME` w/ your desired destination folder:
 
-		git clone --recursive --origin wp-boiler --depth 1 git@github.com:pricelessmisc/wp-boiler.git NEW_PROJECT_NAME
+		git clone --origin wp-boiler --depth 1 git@github.com:pricelessmisc/wp-boiler.git NEW_PROJECT_NAME
 	
-	*`--recursive` forces it to pull the linked WordPress submodule down in addition to the main repo, `--origin wp-boiler` renames `origin` to `wp-boiler` to keep `origin` free for your own use (and give you the flexibility to pull changes from `wp-boiler` in the future if you like), and `--depth 1` makes sure you're just adding the most recent commit of this framework to your new project, keeping it free of this project's revision history.*
+	*`--origin wp-boiler` renames `origin` to `wp-boiler` to keep `origin` free for your own use (and give you the flexibility to pull changes from `wp-boiler` in the future if you like), and `--depth 1` makes sure you're just adding the most recent commit of this framework to your new project, keeping it free of this project's revision history.*
 
 3.	`cd NEW_PROJECT_NAME`
 
@@ -57,7 +57,7 @@ I'll update the WordPress version when I feel it's ready for production. Include
 
 1.	Create a Git alias like this:
 
-		wp = "!f() { git clone --recursive --origin source --depth 1 git@github.com:pricelessmisc/wp-boiler.git $1 && cd $1 && git remote add origin ssh://YOU@YOUR_HOST.COM/YOUR_USER/$1.git && git rebase --root && git push --set-upstream origin master; }; f"
+		wp = "!f() { git clone --origin source --depth 1 git@github.com:pricelessmisc/wp-boiler.git $1 && cd $1 && git remote add origin ssh://YOU@YOUR_HOST.COM/YOUR_USER/$1.git && git rebase --root && git push --set-upstream origin master; }; f"
 
 2.	Make sure you already have a new repo setup with your `NEW_PROJECT_NAME` on your hosting service of choice (Github, Bitbucket, etc)
 
