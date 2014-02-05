@@ -6,11 +6,11 @@
 
 ## About wp-boiler
 
-This is a Git-friendly foundation and workflow for quickly creating and managing new WordPress sites, assembled by [Justin Ruckman](http://jruck.us) of [Priceless Misc](http://pricelessmisc.com), and heavily derivative of Mark Jarquith's [WordPress Skeleton](https://github.com/markjaquith/WordPress-Skeleton).
+This is a Git-friendly foundation and workflow for quickly creating and managing new WordPress sites, assembled by [Justin Ruckman](http://jruck.us) of [Priceless Misc](http://pricelessmisc.com), and derivative of Mark Jarquith's [WordPress Skeleton](https://github.com/markjaquith/WordPress-Skeleton).
 
 It includes a copy of the latest default theme for use as a control variable and emergency fallback during development and testing, plus a handful of commonly-installed plugins:
 
-*  **Akismet** - for spam
+* **Akismet** - for spam
 * **All-In-One SEO Pack** - for tweaking page titles/descriptions as displayed on search engines, regardless of theme used
 * **EWWW Image Optimizer** - for automatically optimizing images beyond what WordPress does internally (good for faster speed and high GTMetrix, YSlow, etc scores)
 * **Database Sync** - for easy push/pull of database between local, dev, production, etc
@@ -21,22 +21,19 @@ It includes a copy of the latest default theme for use as a control variable and
 * **WordPress Importer** - for importing WP export files
 * **WP Typography** - for automatically applying proper em dashes, smart quotes, elipses, etc.
 
-
 A default database is available upon request with a number of baseline configurations.
 
 I'll update the WordPress version when I feel it's ready for production. Included plugins will also be updated, and from time to time,  likely swapped out alltogether.
 
 ## Features
 
-1. The core WordPress code is a Git submodule, and references [the official WordPress repo on Github](https://github.com/WordPress/WordPress). It lives in `/wp/` for easy management away from your custom content, and can be updated via Git, separate from your main project, by checking out the desired release tag straight from WordPress.
+1. The core WordPress code lives in `/wp/` for easy management away from your custom content.
 2. The `/content/` directory in the root overrides the default `/wp-content/` folder.
 3. A `local-config-sample.php` file which you can use to create a `local-config.php`. This file will be ignored by Git, and any settings specificed will automatically override the corresponding settings in the default `wp-config.php`, allowing you to maintain separate configurations on your development and production environments.
 
 ## Starting a new project w/ wp-boiler
 
 1.	Create a new repo on your hosting service of choice (Github, Bitbucket, etc) with your `NEW_PROJECT_NAME`
-
-
 
 2.	On your local machine, in the directory where you keep your code, execute the following, replacing `NEW_PROJECT_NAME` w/ your desired destination folder:
 
