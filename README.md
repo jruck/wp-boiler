@@ -13,12 +13,12 @@ It includes a copy of the latest default theme for use as a control variable and
 * **Akismet** - for spam
 * **All-In-One SEO Pack** - for tweaking page titles/descriptions as displayed on search engines, regardless of theme used
 * **EWWW Image Optimizer** - for automatically optimizing images beyond what WordPress does internally (good for faster speed and high GTMetrix, YSlow, etc scores)
-* **Database Sync** - for easy push/pull of database between local, dev, production, etc
 * **GTMetrix for WordPress** - for optimizing and monitoring site performance, includes built-in support for managing CloudFlare
 * **Hide Update Reminder Message** - for disabling the constant update reminders, useful when handing sites over to clients so they aren't bothered by upgrade alerts, or tempted to upgrade without consulting with you first
 * **Mobble** - for easy device, browser, and individual page detection for use in CSS
 * **W3 Total Cache** - for, like, caching
 * **WordPress Importer** - for importing WP export files
+* **WP Migrate DB Pro** - this requires a license, but it's hands-down the best way to keep WP databases in sync
 * **WP Typography** - for automatically applying proper em dashes, smart quotes, elipses, etc.
 
 A default database is available upon request with a number of baseline configurations.

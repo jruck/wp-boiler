@@ -1,13 +1,17 @@
 #Basic
-/shared
-/local-config.php
-/sql-dump-*.sql
-/db-sync
-/content/upgrade/
 .DS_Store
+/local-config.php
+/shared
+/content/upgrade/
+/content/backup-db/
+/content/wp-cache-config.php
+/content/db.php
+/content/cache/
+/content/debug/
+/object-cache.php
 
-#WP Uploads (off by default)
-#/content/uploads
+#WP Uploads (on by default)
+/content/uploads
 
 #Project Files
 *.esproj
