@@ -46,7 +46,7 @@ if ( !class_exists( 'All_in_One_SEO_Pack_Module' ) ) {
 			if ( empty( $this->file ) ) $this->file = __FILE__;
 			$this->plugin_name = AIOSEOP_PLUGIN_NAME;
 			$this->plugin_path = Array();
-			$this->plugin_path['dir'] = plugin_dir_path( $this->file );
+//			$this->plugin_path['dir'] = plugin_dir_path( $this->file );
 			$this->plugin_path['basename'] = plugin_basename( $this->file );
 			$this->plugin_path['dirname'] = dirname( $this->plugin_path['basename'] );
 			$this->plugin_path['url'] = plugin_dir_url( $this->file );
@@ -286,6 +286,27 @@ if ( !class_exists( 'All_in_One_SEO_Pack_Module' ) ) {
 		  }
 		  if ( empty( $output ) ) return '';
 		  return $output;
+		}
+		
+		/*** adds support for using %cf_(name of field)% for using custom fields / Advanced Custom Fields in titles / descriptions etc. ***/
+		function apply_cf_fields( $format ) {
+			return preg_replace_callback( '/%cf_([^%]*?)%/', Array( $this, 'cf_field_replace' ), $format );
+		}
+
+		function cf_field_replace( $matches ) {
+			$result = '';
+			if ( !empty( $matches ) ) {
+				if ( !empty( $matches[1] ) ) {
+					if ( function_exists( 'get_field' ) ) $result = get_field( $matches[1] );
+						if ( empty( $result ) ) {
+							global $post;
+							if ( !empty( $post ) ) $result = get_post_meta( $post->ID, $matches[1], true );
+							}
+							if ( empty( $result ) ) $result = $matches[0];
+						} else $result = $matches[0];
+		        }
+				$result = strip_tags( $result );
+		        return $result;
 		}
 		
 		/**
@@ -973,9 +994,11 @@ if ( !class_exists( 'All_in_One_SEO_Pack_Module' ) ) {
 			if ( in_array( $options['type'], Array( 'multiselect', 'select', 'multicheckbox', 'radio', 'checkbox', 'textarea', 'text', 'submit', 'hidden' ) ) && ( is_string( $value ) ) )
 				$value = esc_attr( $value );
 			$buf = '';
+			$onload = '';
 			if ( !empty( $options['count'] ) ) {
 				$n++;
 				$attr .= " onKeyDown='countChars(document.post.$name,document.post.{$prefix}length$n)' onKeyUp='countChars(document.post.$name,document.post.{$prefix}length$n)'";
+				$onload = "countChars(document.post.$name,document.post.{$prefix}length$n);";
 			}
 			if ( isset( $opts['id'] ) ) $attr .= " id=\"{$opts['id']}\" ";
 			switch ( $options['type'] ) {
@@ -1005,6 +1028,7 @@ if ( !class_exists( 'All_in_One_SEO_Pack_Module' ) ) {
 					$count_desc = __( ' characters. Most search engines use a maximum of %s chars for the %s.', 'all_in_one_seo_pack' );
 				$buf .= "<br /><input readonly type='text' name='{$prefix}length$n' size='3' maxlength='3' style='width:53px;height:23px;margin:0px;padding:0px 0px 0px 10px;' value='" . $this->strlen($value) . "' />"
 					 . sprintf( $count_desc, $size, $this->strtolower( $options['name'] ) );
+				if ( !empty( $onload ) ) $buf .= "<script>{$onload}</script>";
 			}
 			return $buf;
 		}

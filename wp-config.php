@@ -1,7 +1,4 @@
 <?php
-/** Enable W3 Total Cache */
-define('WP_CACHE', true); // Added by W3 Total Cache
-
 
 // ===================================================
 // Load database info and local development parameters
